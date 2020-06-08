@@ -49,6 +49,7 @@
     <Compile Include="ClientTCP\ProjectGClient.cs" />
     <Compile Include="Client\Game\Game.cs" />
     <Compile Include="Client\Login\Login.cs" />
+    <Compile Include="Client\Messenger\Messenger.cs" />
     <Compile Include="Client\ProjectG.cs" />
     <Compile Include="CommandForm\ChatCommands.cs">
       <SubType>Form</SubType>
@@ -68,7 +69,7 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\FakeProjectG\FakeProjectG.csproj">
-      <Project>{a29a564e-087c-4aee-b7b3-38ae6a0b3dcc}</Project>
+      <Project>{A29A564E-087C-4AEE-B7B3-38AE6A0B3DCC}</Project>
       <Name>FakeProjectG</Name>
     </ProjectReference>
   </ItemGroup>

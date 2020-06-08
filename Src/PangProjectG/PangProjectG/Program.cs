@@ -48,7 +48,10 @@ namespace PangProjectG
             ProjectGClient = new ProjectGClient(LoginServerIP, LoginServerPort);
 
             ProjectGClient.Start();
-
+            ProjectGClient.OnClientConnected += player =>
+            {
+                player.Conn = ProjectGClient;
+            };
             ProjectGClient.OnPacketReceived += Server_OnPacketReceived;
         }
 
@@ -58,5 +61,6 @@ namespace PangProjectG
 
             client.HandleTypeClient(packet);
         }
+
     }
 }

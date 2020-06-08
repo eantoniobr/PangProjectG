@@ -30,7 +30,7 @@ namespace FakeProjectG.ServerClient
         public event PacketReceivedEvent OnPacketReceived;
 
         #endregion
-        public TcpClient client { get; set; }
+        public TcpClient OnClient { get; set; }
         public TcpClient TcpLogin { get; set; }
         public TcpClient TcpGame { get; set; }
         public TcpClient TcpMessenge { get; set; }
@@ -51,7 +51,7 @@ namespace FakeProjectG.ServerClient
             {
                 this.LoginServerIP = IPAddress.Parse(IP);
                 this.LoginServerPort = Port;
-                client = new TcpClient();
+                OnClient = new TcpClient();
                 Clients = new List<PClient>();
                 TcpLogin = new TcpClient();
                 TcpGame = new TcpClient();
@@ -71,15 +71,15 @@ namespace FakeProjectG.ServerClient
             {
 
                 TcpLogin.Connect(this.LoginServerIP, LoginServerPort);
-                client = TcpLogin;
+                OnClient = TcpLogin;
                 running = true;
-                //Inicia Thread para escuta de clientes
+                //Inicia Thread para escuta de OnClientes
                 var WaitConnectionsThread = new Thread(new ThreadStart(HandleClient));
                 WaitConnectionsThread.Start();
             }
-            catch (Exception e)
+            catch
             {
-                Console.WriteLine("Unexpected exception : {0}", e.ToString());
+                WriteConsole.WriteLine("[BOT_EXCEPTION]: SERVER OFFLINE", ConsoleColor.Red);
                 Console.ReadKey();
                 Environment.Exit(0);
             }
@@ -89,24 +89,29 @@ namespace FakeProjectG.ServerClient
         {
             try
             {
-                if (ServerType == Defines.ServerTypeEnum.Login)
+                if (ServerType == ServerTypeEnum.Login)
                 {
                     TcpLogin.Connect(IP, Port);
-                    client = TcpLogin;
+                    OnClient = TcpLogin;
                 }
-                 else if (ServerType == Defines.ServerTypeEnum.Game)
+                else if (ServerType == ServerTypeEnum.Game)
                 {
                     TcpGame.Connect(IP, Port);
-                    client = TcpGame;
+                    OnClient = TcpGame;
+                }
+                else if (ServerType == ServerTypeEnum.Message)
+                {
+                    TcpMessenge.Connect(IP, Port);
+                    OnClient = TcpMessenge;
                 }
                 running = true;
-                //Inicia Thread para escuta de clientes
+                //Inicia Thread para escuta de OnClientes
                 var WaitConnectionsThread = new Thread(new ThreadStart(HandleClient));
                 WaitConnectionsThread.Start();
             }
-            catch (Exception e)
+            catch
             {
-                Console.WriteLine("Unexpected exception : {0}", e.ToString());
+                WriteConsole.WriteLine("[BOT_EXCEPTION]: SERVER OFFLINE", ConsoleColor.Red);
                 Console.ReadKey();
                 Environment.Exit(0);
             }
@@ -118,14 +123,14 @@ namespace FakeProjectG.ServerClient
             {
                 // Cliente conectado
                 Thread t = new Thread(new ParameterizedThreadStart(HandlePacket));
-                t.Start(client);
+                t.Start(OnClient);
                 break;
             }
         }
 
         private void HandlePacket(object obj)
         {
-            //Recebe cliente a partir do parâmetro
+            //Recebe OnCliente a partir do parâmetro
             TcpClient tcpClient = (TcpClient)obj;
 
             var Player = OnConnectBot(tcpClient);
@@ -139,7 +144,7 @@ namespace FakeProjectG.ServerClient
                 {
                     var messageBufferRead = new byte[500000]; //Tamanho do BUFFER á ler
 
-                    //Lê mensagem do cliente
+                    //Lê mensagem do OnCliente
                     //size =500000;
                     int bytesRead = Player.Tcp.GetStream().Read(messageBufferRead, 0, 500000);
 
@@ -156,10 +161,9 @@ namespace FakeProjectG.ServerClient
                         OnPacketReceived?.Invoke(Player, packet);
                     }
                 }
-                catch(Exception ex)
+                catch (Exception ex)
                 {
                     OnException(Player, ex);
-                    OnDisconnectBot(Player);
                 }
             }
         }

@@ -41,12 +41,12 @@ namespace PangProjectG.Defines
     }
     internal enum THLoginPacketCodeEnum : uint
     {
-        Sucess = 0x00,
-        InvalidoId = 0xE36FD24D,
-        InvalidoIdPw = 0xE35BD24D,
-        Banido = 0xE3F4D14D,
-        UsuarioEmUso = 0xE3F3D14,
-        ServerInMaintenance = 0xE348D24D
+        LOGIN_SUCESS = 0,
+        INVALID_USER = 3815756365,
+        INVALID_PASS = 1305631715,
+        Banido = 3824472397,
+        USER_IN_USE = 1305605091,
+        ServerInMaintenance = 3813200461
     }
 
     internal enum PLAYER_GAME_LOGIN_RESULT : uint
@@ -387,63 +387,12 @@ namespace PangProjectG.Defines
         PLAYER_REQUEST_INFO_RESULT_TYPE = 0x0089,
         NOTHING = 0xFFFF,
     }
-    public enum MessengeServerPacketEnum
+    public enum MessengerResponseEnum
     {
         /// <summary>
         /// LOGIN PLAYER IN SERVER MS
         /// </summary>
-        PLAYER_LOGIN = 0x0012,
-        /// <summary>
-        /// RECONNECT TO PLAYER IN SERVER
-        /// </summary>
-        PLAYER_RECONNECT_SERVER = 0x0014,
-        /// <summary>
-        /// DISCONNECT TO PLAYER IN SERVER
-        /// </summary>
-        PLAYER_REQUEST_DISCONNECT_MSSERVER = 0x0016,
-        /// <summary>
-        /// requesita procurar um amigo, usando messanger_server
-        /// </summary>
-        PLAYER_FIND_FRIEND = 0x0017,
-
-        PLAYER_REQUEST_FIND_FRIEND = 0x0018,
-
-        Unknown_19 = 0x0019,
-
-        /// <summary>
-        /// Envia o canal selecionado pelo player
-        /// </summary>
-        PLAYER_SELECT_CHANNEL = 0x0023,
-        /// <summary>
-        /// chat para guild no messenger server
-        /// </summary>
-        PLAYER_REQUEST_GUILD_CHAT = 0x0025,
-        /// <summary>
-        /// jogador bloqueia amigo
-        /// </summary>
-        PLAYER_BLOCK_FRIEND = 0x001A,
-        /// <summary>
-        /// jogador desbloqueia amigo
-        /// </summary>
-        PLAYER_UNBLOCK_FRIEND = 0x001B,
-        /// <summary>
-        /// jogaodr deleta o amigo da lista de amigos
-        /// </summary>
-        PLAYER_DELETE_FRIEND = 0x001C,
-        /// <summary>
-        /// PLAYER ONLINE
-        /// </summary>
-        SERVER_CHECK_PLAYER_CONNECTED = 0x001D,
-        /// <summary>
-        /// chat do messenger server
-        /// </summary>
-        PLAYER_REQUEST_CHAT = 0x001E,
-
-        /// <summary>
-        /// MUDA O APELIDO DO JOGADOR 
-        /// </summary>
-        PLAYER_CHANGE_FRIEND_NICKNAME = 0x001F,
-
-        Unknown_42 = 0x002A,
+        PLAYER_CONNECTION = 0x0900,
+        
     }
 }

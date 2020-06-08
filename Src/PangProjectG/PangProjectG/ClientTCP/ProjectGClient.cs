@@ -5,7 +5,6 @@ using PangProjectG.Client;
 using System;
 using System.Linq;
 using System.Net.Sockets;
-
 namespace PangProjectG.ClientTCP
 {
     public class ProjectGClient : TCPClient
@@ -36,7 +35,16 @@ namespace PangProjectG.ClientTCP
                 player.ServerType = FakeProjectG.Defines.ServerTypeEnum.Game;
                 Clients.Add(player);
             }
-            WriteConsole.WriteLine($"[BOT_{player.ServerType}_CONNECTED]: Sucess", ConsoleColor.Red);
+            else if (ServerType == FakeProjectG.Defines.ServerTypeEnum.Message)
+            {
+                player = (ProjectG)Clients.First();
+                Clients.RemoveAt(0);
+                player.Tcp = tcp;
+                player.Conn = this;
+                player.ServerType = FakeProjectG.Defines.ServerTypeEnum.Message;
+                Clients.Add(player);
+            }
+            WriteConsole.WriteLine($"[BOT_{player.ServerType}_CONNECTED]: Sucess", ConsoleColor.Green);
             return player;
         }
 
@@ -49,7 +57,8 @@ namespace PangProjectG.ClientTCP
 
         public override void OnException(PClient player, Exception ex)
         {
-            Console.WriteLine("Unexpected exception : {0}", ex.ToString());
+            WriteConsole.WriteLine("[BOT_EXCEPTION]: {0}", ex.ToString(), ConsoleColor.Red);
+            OnDisconnectBot(player);
             Console.ReadKey();
             Environment.Exit(0);
         }

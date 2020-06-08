@@ -4,7 +4,7 @@ namespace FakeProjectG
     public static class WriteConsole
     {
         // Specifies how silent the console is.
-        static short msg_silent = 0;
+        static readonly short msg_silent = 0;
 
         // enum with console color codes (FG and BG colors are the same)
         enum Color

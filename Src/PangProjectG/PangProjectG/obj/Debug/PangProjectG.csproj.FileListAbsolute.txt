@@ -1,0 +1,8 @@
+C:\Users\Cleudiana\Desktop\PangProjectG\Src\Build\PangProjectG.exe.config
+C:\Users\Cleudiana\Desktop\PangProjectG\Src\Build\PangProjectG.exe
+C:\Users\Cleudiana\Desktop\PangProjectG\Src\Build\PangProjectG.pdb
+C:\Users\Cleudiana\Desktop\PangProjectG\Src\PangProjectG\PangProjectG\obj\Debug\PangProjectG.csprojAssemblyReference.cache
+C:\Users\Cleudiana\Desktop\PangProjectG\Src\PangProjectG\PangProjectG\obj\Debug\PangProjectG.csproj.CoreCompileInputs.cache
+C:\Users\Cleudiana\Desktop\PangProjectG\Src\PangProjectG\PangProjectG\obj\Debug\PangProjectG.csproj.CopyComplete
+C:\Users\Cleudiana\Desktop\PangProjectG\Src\PangProjectG\PangProjectG\obj\Debug\PangProjectG.exe
+C:\Users\Cleudiana\Desktop\PangProjectG\Src\PangProjectG\PangProjectG\obj\Debug\PangProjectG.pdb

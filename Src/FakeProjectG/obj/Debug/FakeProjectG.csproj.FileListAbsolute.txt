@@ -1,0 +1,7 @@
+C:\Users\Cleudiana\Desktop\PangProjectG\Build\FakeProjectG.dll.config
+C:\Users\Cleudiana\Desktop\PangProjectG\Build\FakeProjectG.dll
+C:\Users\Cleudiana\Desktop\PangProjectG\Build\FakeProjectG.pdb
+C:\Users\Cleudiana\Desktop\PangProjectG\Src\FakeProjectG\obj\Debug\FakeProjectG.csprojAssemblyReference.cache
+C:\Users\Cleudiana\Desktop\PangProjectG\Src\FakeProjectG\obj\Debug\FakeProjectG.csproj.CoreCompileInputs.cache
+C:\Users\Cleudiana\Desktop\PangProjectG\Src\FakeProjectG\obj\Debug\FakeProjectG.dll
+C:\Users\Cleudiana\Desktop\PangProjectG\Src\FakeProjectG\obj\Debug\FakeProjectG.pdb

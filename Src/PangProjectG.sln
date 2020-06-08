@@ -3,9 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.30011.22
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PangProjectG", "PangProjectG\PangProjectG.csproj", "{CBFA1B4F-2139-4488-9EE3-7994A588FD35}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PangProjectG", "PangProjectG\PangProjectG\PangProjectG.csproj", "{CBFA1B4F-2139-4488-9EE3-7994A588FD35}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FakeProjectG", "..\FakeProjectG\FakeProjectG.csproj", "{A29A564E-087C-4AEE-B7B3-38AE6A0B3DCC}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FakeProjectG", "FakeProjectG\FakeProjectG.csproj", "{A29A564E-087C-4AEE-B7B3-38AE6A0B3DCC}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

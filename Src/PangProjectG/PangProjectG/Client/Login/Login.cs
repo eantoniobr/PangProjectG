@@ -5,7 +5,9 @@ using FakeProjectG.Defines;
 using FakeProjectG.Packet;
 using PangProjectG.Defines;
 using System;
+using System.ComponentModel;
 using System.Diagnostics;
+using System.Linq;
 using System.Net;
 
 namespace PangProjectG.Client.Login
@@ -86,7 +88,7 @@ namespace PangProjectG.Client.Login
                 Program.ProjectGClient.ServerType = ServerTypeEnum.Game;
                 Program.ProjectGClient.Start(client.Game.IP, client.Game.Port);
             } 
-            else if (CountPacket >= 7 && PacketGameRead && client.Login.PangyaVersion == EnumPangyaVersion.TH)
+            else if (CountPacket >= 6 && PacketGameRead && client.Login.PangyaVersion == EnumPangyaVersion.TH)
             {
                 SelectServer(client);
 
@@ -143,8 +145,9 @@ namespace PangProjectG.Client.Login
                                 var port = msg.Port;
 
                                 var s = new MessengerSettings(ip, port, name, id);
-                                packet.Skip(92);
                                 Program.ServersMessenger.Add(s);
+
+                                client.Messenger = s;
                             }
                             catch
                             {
@@ -203,7 +206,15 @@ namespace PangProjectG.Client.Login
                             client.GetLevel = (byte)packet.ReadUInt32();
                             packet.Skip(6);
                             client.GetNickname = packet.ReadPStr();
-                            WriteConsole.WriteLine($"[BOOT_LOGIN_PROCESS]: {client.GetLogin}, {client.GetNickname}");
+                            Console.WriteLine();
+                            Console.WriteLine("**************************************************************************");
+                            Console.WriteLine("                                   LOGIN:         " + client.GetLogin);
+                            Console.WriteLine("                                   UID:             " + client.GetUID);
+                            Console.WriteLine("                                   TYPE:      " + client.GetCapability);
+                            Console.WriteLine("                                   LEVEL:         " + client.GetLevel);
+                            Console.WriteLine("                                   NICK:       " + client.GetNickname);
+                            Console.WriteLine("**************************************************************************");
+                            Console.WriteLine();
                         }
                         break;
                     case LoginPacketCodeEnum.InvalidoIdPw:
@@ -253,17 +264,52 @@ namespace PangProjectG.Client.Login
             }
             else if (client.Login.PangyaVersion == EnumPangyaVersion.TH)
             {
-                LoginPacketCodeEnum Code = (LoginPacketCodeEnum)packet.ReadByte();
-                WriteConsole.WriteLine($"[BOOT_LOGIN_PROCESS]: {Code}");
-                switch ((THLoginPacketCodeEnum)Code)
+                THLoginPacketCodeEnum Code = THLoginPacketCodeEnum.LOGIN_SUCESS;
+                if (packet.Message.Count() <= 7)
                 {
-                    case THLoginPacketCodeEnum.InvalidoId:
+                    Code = (THLoginPacketCodeEnum)packet.ReadUInt32();
+                }
+                else if (packet.Message.Count() > 7)
+                {
+                    Code = (THLoginPacketCodeEnum)packet.ReadByte();
+                }
+                WriteConsole.WriteLine($"[BOOT_LOGIN_PROCESS]: Type {Code}");
+                switch (Code)
+                {
+                    case THLoginPacketCodeEnum.LOGIN_SUCESS:
+                        {
+                            client.GetLogin = packet.ReadPStr();
+                            client.GetUID = packet.ReadUInt32();
+                            client.GetCapability = (byte)packet.ReadInt32();
+                            client.GetLevel = (byte)packet.ReadUInt32();
+                            packet.Skip(6);
+                            client.GetNickname = packet.ReadPStr();
+                            Console.WriteLine();
+                            Console.WriteLine("**************************************************************************");
+                            Console.WriteLine("                                   LOGIN:         "+ client.GetLogin);
+                            Console.WriteLine("                                   UID:             "+ client.GetUID);
+                            Console.WriteLine("                                   TYPE:      "+client.GetCapability);
+                            Console.WriteLine("                                   LEVEL:         "+ client.GetLevel);
+                            Console.WriteLine("                                   NICK:       "+ client.GetNickname);
+                            Console.WriteLine("**************************************************************************");
+                            Console.WriteLine();
+                        }
                         break;
-                    case THLoginPacketCodeEnum.InvalidoIdPw:
+                    case THLoginPacketCodeEnum.INVALID_USER:
+                        {
+                            //client.Disconnect();
+                        }
                         break;
+                    case THLoginPacketCodeEnum.INVALID_PASS:
+                        {
+                            throw new Exception("SORRY, USER PASS INVALID ");
+                        }
                     case THLoginPacketCodeEnum.Banido:
+                        {
+                           // client.Disconnect();
+                        }
                         break;
-                    case THLoginPacketCodeEnum.UsuarioEmUso:
+                    case THLoginPacketCodeEnum.USER_IN_USE:
                         {
                             client.Response.Write(new byte[] { 0x04, 0x00, 0x00, 0x00, 0x00, 0x00 });
                             client.SendResponse();
@@ -273,8 +319,10 @@ namespace PangProjectG.Client.Login
                         break;
                     default:
                         {
-                            client.Response.Write(new byte[] { 0x04, 0x00, 0x00, 0x00, 0x00, 0x00 });
-                            client.SendResponse();
+                            //client.Disconnect();
+                            WriteConsole.WriteLine($"[BOOT_LOGIN_PACKETLOG]: {packet.GetLog()}");
+
+                            packet.Save();
                         }
                         break;
                 }
@@ -291,9 +339,15 @@ namespace PangProjectG.Client.Login
             {
                 packet.Skip(4);
                 client.GetAuth2 = packet.ReadPStr();
-                client.Disconnect();
-                Program.ProjectGClient.ServerType = ServerTypeEnum.Game;
-                Program.ProjectGClient.Start(client.Game.IP, client.Game.Port);
+               
+                client.Conn.ServerType = ServerTypeEnum.Game;
+                client.Conn.Start(client.Game.IP, client.Game.Port);
+
+                if (client.Messenger.ID != 0)
+                {
+                    client.Conn.ServerType = ServerTypeEnum.Message;
+                    client.Conn.Start(client.Messenger.IP, client.Messenger.Port);
+                }
             }
         }
 

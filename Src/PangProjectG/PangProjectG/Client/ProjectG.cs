@@ -4,17 +4,19 @@ using FakeProjectG.Defines;
 using FakeProjectG.Packet;
 using PangProjectG.Client.Game;
 using PangProjectG.Client.Login;
+using PangProjectG.Client.Messanger;
 using PangProjectG.CommandForm;
 using PangProjectG.Defines;
 using System.Linq;
+using System.Net;
 using System.Net.Sockets;
-
 namespace PangProjectG.Client
 {
     public partial class ProjectG : PClient
     {
         ClientLogin PacketLogin { get; set; }
         public ClientGame PacketGame { get; set; }
+        public ClientMessanger PacketMessenger { get; set; }
         public long Cookies { get; set; }
         public ulong Pangs { get { return Info.Statistic.Pang; } set { Info.Statistic.Pang = value; } }
 
@@ -27,6 +29,7 @@ namespace PangProjectG.Client
             ServerType = ServerTypeEnum.Login;
             PacketLogin = new ClientLogin();
             PacketGame = new ClientGame();
+            PacketMessenger = new ClientMessanger();
             Commands = new ChatCommands();
         }
 
@@ -101,6 +104,12 @@ namespace PangProjectG.Client
                     }
                     break;
                 case ServerTypeEnum.Message:
+                    {
+                        var packetID = (MessengerResponseEnum)packet.Id;
+
+
+                        PacketMessenger.Handle(this, packetID, packet);
+                    }
                     break;
                 default:
                     break;
@@ -113,6 +122,16 @@ namespace PangProjectG.Client
             Response.Write(GetNickname);
             Response.Write(comando);
             SendResponse();
+        }
+
+        public string GetIpAdress
+        {
+            get {return ((IPEndPoint)Tcp.Client.RemoteEndPoint).Address.ToString(); }
+        }
+
+        public byte[] GetIpAdressBytes
+        {
+            get {return new byte[GetIpAdress.Length]; }
         }
     }
 }

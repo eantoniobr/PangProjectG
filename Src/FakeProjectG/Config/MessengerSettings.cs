@@ -23,5 +23,8 @@ namespace FakeProjectG.Config
             Name = name;
             ID = id;
         }
+        public MessengerSettings()
+        {
+        }
     }
 }

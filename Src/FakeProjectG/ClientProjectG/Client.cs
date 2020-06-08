@@ -43,11 +43,13 @@ namespace FakeProjectG.ClientProjectG
         public byte GetSex { get; set; }
         public byte GetCapability { get; set; } = 0;
         public byte GetLevel { get; set; } = 0;
-        public string GetAuth1 { get; set; } = String.Empty;
-        public string GetAuth2 { get; set; } = String.Empty;
+        public string GetAuth1 { get; set; } = string.Empty;
+        public string GetAuth2 { get; set; } = string.Empty;
 
         public LoginSettings Login { get; set; }
         public GameSettings Game { get; set; }
+
+        public MessengerSettings Messenger { get; set; }
 
         public ServerTypeEnum ServerType { get; set; }
         public PlayerInfo Info { get; set; }
@@ -67,10 +69,9 @@ namespace FakeProjectG.ClientProjectG
                 var Ini = new IniFile(ConfigurationManager.AppSettings["Config"]);
                 Login = new LoginSettings(Ini);
                 Game = new GameSettings(Ini);
-
+                Messenger = new MessengerSettings();
                 GetLogin = Login.User;
                 GetPass = Login.PassWord;
-
             }
             catch
             {

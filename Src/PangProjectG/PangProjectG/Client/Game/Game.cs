@@ -22,7 +22,7 @@ namespace PangProjectG.Client.Game
                 case GamePacketEnumResponse.PLAYER_CONNECTION:
                     {
                         CountPacket++;
-                        HandleSendGameLogin(client, packet.Message[8]);
+                        HandleSendGameLogin(client, packet, packet.Message[8]);
                     }
                     break;
                 case GamePacketEnumResponse.PLAYER_GAME_RESUME:
@@ -185,6 +185,11 @@ namespace PangProjectG.Client.Game
                 case GamePacketEnumResponse.NOTHING:
                     break;
                 default:
+                    {
+                        WriteConsole.WriteLine($"[BOOT_GAME_PACKETLOG]: {packet.GetLog()}");
+
+                        packet.Save();
+                    }
                     break;
             }
 
@@ -239,7 +244,7 @@ namespace PangProjectG.Client.Game
         }
 
 
-        private void HandleSendGameLogin(ProjectG client, byte Key)
+        private void HandleSendGameLogin(ProjectG client, ClientPacket packet, byte Key)
         {
             client.GetKey = Key;
             client.KeyLogin = client.GetKey;
@@ -259,6 +264,10 @@ namespace PangProjectG.Client.Game
             }
             if (client.Login.PangyaVersion == EnumPangyaVersion.TH)
             {
+                packet.Skip(9);
+                var ipAdress = packet.ReadPStr();
+
+                Console.WriteLine($"[PLAYER_ADRESS]: {ipAdress}");
                 client.Response.WritePStr("829.01");// is server version TH
                 client.Response.Write(new byte[] { 0xC7, 0xD2, 0x4A, 0x25, 0x00, 0x00, 0x00, 0x00, });
                 client.Response.WritePStr(client.GetAuth2);
